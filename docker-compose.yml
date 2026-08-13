@@ -79,6 +79,22 @@ services:
     networks:
       - ombs-net
 
+  angular-portal:
+    build:
+      context: ./frontend/angular-portal
+    ports:
+      - "4200:4200"
+    networks:
+      - ombs-net
+
+  react-analytics:
+    build:
+      context: ./frontend/react-analytics
+    ports:
+      - "4300:4300"
+    networks:
+      - ombs-net
+
 networks:
   ombs-net:
     driver: bridge
