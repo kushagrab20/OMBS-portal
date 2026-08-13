@@ -1,9 +1,9 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 ENV NG_DISABLE_VERSION_CHECK=true
-COPY package*.json ./
+COPY frontend/angular-portal/package*.json ./
 RUN npm install --legacy-peer-deps
-COPY . .
+COPY frontend/angular-portal/ ./
 RUN npx ng build
 
 FROM nginx:alpine
