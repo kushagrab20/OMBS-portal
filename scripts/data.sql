@@ -4,12 +4,12 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- 1. ombs_auth
 TRUNCATE TABLE ombs_auth.users;
-INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('999999', '$2a$10$w82HhV.sE10WkP3R1o9gX.k3iUuY2uU7W5U2W5U2W5U2W5U2W5U2W', 'ADMIN');
-INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('100001', '$2a$10$w82HhV.sE10WkP3R1o9gX.k3iUuY2uU7W5U2W5U2W5U2W5U2W5U2W', 'MEMBER');
-INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('100002', '$2a$10$w82HhV.sE10WkP3R1o9gX.k3iUuY2uU7W5U2W5U2W5U2W5U2W5U2W', 'MEMBER');
-INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200001', '$2a$10$w82HhV.sE10WkP3R1o9gX.k3iUuY2uU7W5U2W5U2W5U2W5U2W5U2W', 'MAID');
-INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200002', '$2a$10$w82HhV.sE10WkP3R1o9gX.k3iUuY2uU7W5U2W5U2W5U2W5U2W5U2W', 'MAID');
-INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200003', '$2a$10$w82HhV.sE10WkP3R1o9gX.k3iUuY2uU7W5U2W5U2W5U2W5U2W5U2W', 'MAID');
+INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('999999', 'admin123', 'ADMIN');
+INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('100001', 'member123', 'MEMBER');
+INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('100002', 'member123', 'MEMBER');
+INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200001', 'maid123', 'MAID');
+INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200002', 'maid123', 'MAID');
+INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200003', 'maid123', 'MAID');
 
 -- 2. ombs_user
 TRUNCATE TABLE ombs_user.members;
