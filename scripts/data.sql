@@ -10,6 +10,7 @@ INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('100002', 'member1
 INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200001', 'maid123', 'MAID');
 INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200002', 'maid123', 'MAID');
 INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200003', 'maid123', 'MAID');
+INSERT INTO ombs_auth.users (user_id, password, role) VALUES ('200004', 'maid123', 'MAID');
 
 -- 2. ombs_user
 TRUNCATE TABLE ombs_user.members;
@@ -25,6 +26,8 @@ INSERT INTO ombs_user.maids (maid_id, maid_name, maid_address, maid_age, maid_ty
 VALUES ('200002', 'Priya Singh', 'Sector 15, Noida', 32, 'Cook', 6, 'Part Time', 6000.0, 'priya@gmail.com', '9999888876', 'ALLOCATED');
 INSERT INTO ombs_user.maids (maid_id, maid_name, maid_address, maid_age, maid_type, experience_years, preferred_job_type, salary_expectation, contact_email, contact_phone, status) 
 VALUES ('200003', 'Pooja Sharma', 'Indiranagar, Bangalore', 24, 'Baby sitter', 2, 'Full Time', 12000.0, 'pooja@gmail.com', '9999888875', 'AVAILABLE');
+INSERT INTO ombs_user.maids (maid_id, maid_name, maid_address, maid_age, maid_type, experience_years, preferred_job_type, salary_expectation, contact_email, contact_phone, status) 
+VALUES ('200004', 'Sunita Devi', 'Sector 62, Noida', 30, 'All rounder', 7, 'Full Time', 10000.0, 'sunita@gmail.com', '9999888874', 'AVAILABLE');
 
 -- 3. ombs_matching
 TRUNCATE TABLE ombs_matching.jobs;
