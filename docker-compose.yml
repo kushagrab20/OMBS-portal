@@ -125,6 +125,24 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - SPRING_CLOUD_GATEWAY_ROUTES_0_ID=auth-service
+      - SPRING_CLOUD_GATEWAY_ROUTES_0_URI=http://auth-service:8081
+      - SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0=Path=/api/auth/**
+      - SPRING_CLOUD_GATEWAY_ROUTES_1_ID=user-service
+      - SPRING_CLOUD_GATEWAY_ROUTES_1_URI=http://user-service:8082
+      - SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0=Path=/api/users/**
+      - SPRING_CLOUD_GATEWAY_ROUTES_2_ID=matching-service
+      - SPRING_CLOUD_GATEWAY_ROUTES_2_URI=http://matching-service:8083
+      - SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0=Path=/api/matching/**
+      - SPRING_CLOUD_GATEWAY_ROUTES_3_ID=payment-service
+      - SPRING_CLOUD_GATEWAY_ROUTES_3_URI=http://payment-service:8084
+      - SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0=Path=/api/payments/**
+      - SPRING_CLOUD_GATEWAY_ROUTES_4_ID=feedback-service
+      - SPRING_CLOUD_GATEWAY_ROUTES_4_URI=http://feedback-service:8085
+      - SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0=Path=/api/feedbacks/**
+      - SPRING_CLOUD_GATEWAY_ROUTES_5_ID=report-service
+      - SPRING_CLOUD_GATEWAY_ROUTES_5_URI=http://report-service:8086
+      - SPRING_CLOUD_GATEWAY_ROUTES_5_PREDICATES_0=Path=/api/reports/**
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
