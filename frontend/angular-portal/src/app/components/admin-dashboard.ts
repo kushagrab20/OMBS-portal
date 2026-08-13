@@ -264,12 +264,23 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getAvailableMaidsForJob(job: any): any[] {
-    // Basic recommendation filter: Specialty match
-    return this.availableMaids.filter(maid => {
-      const type = maid.maidType.toLowerCase();
-      const desc = job.jobDetail.toLowerCase();
+    if (!this.availableMaids || this.availableMaids.length === 0) return [];
+    
+    const desc = (job.jobDetail || '').toLowerCase();
+    
+    const matched = this.availableMaids.filter(maid => {
+      const type = (maid.maidType || '').toLowerCase();
+      const isAllRounder = type.includes('all rounder') || type.includes('all-rounder') || type.includes('allrounder');
+      
+      // All rounders match every job request
+      if (isAllRounder) return true;
+      
+      // Specific maidType match with job description
       return desc.includes(type) || type.includes(desc);
     });
+
+    // Fallback: If no specific specialty maid matches, return all available maids so Admin is never blocked
+    return matched.length > 0 ? matched : this.availableMaids;
   }
 
   onAllocate(jobId: number): void {
