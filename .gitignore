@@ -1,0 +1,17 @@
+# Target directories & Maven binaries
+**/target/
+**/*.jar
+backend/apache-maven-3.9.6/
+
+# Node modules & build outputs
+**/node_modules/
+**/dist/
+**/.angular/
+
+# IDE & OS files
+.idea/
+.vscode/
+*.iml
+*.log
+.DS_Store
+Thumbs.db

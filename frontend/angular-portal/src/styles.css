@@ -1,0 +1,54 @@
+/* Global App CSS Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Glassmorphism utility */
+.bg-white-10 {
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(5px);
+}
+.border-white-10 {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Smooth transition utility */
+a, button, .card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navigation Links */
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+}
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+  color: #ffffff;
+}
+
+.hover-white:hover {
+  color: #ffffff !important;
+}
+
+/* Card overrides */
+.card {
+  background-color: #ffffff;
+}
+
+/* Custom form elements */
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.15);
+}
+.form-label {
+  color: #475569;
+}

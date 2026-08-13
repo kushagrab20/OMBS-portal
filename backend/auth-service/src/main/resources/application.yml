@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/ombs_auth?useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Kushagra@20
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
