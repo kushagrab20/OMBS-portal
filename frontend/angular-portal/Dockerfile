@@ -7,5 +7,6 @@ COPY frontend/angular-portal/ ./
 RUN npx ng build
 
 FROM nginx:alpine
+ENV PORT=80
+COPY frontend/angular-portal/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist/angular-portal/browser /usr/share/nginx/html
-CMD ["sh", "-c", "sed -i 's/listen  *80;/listen '\"${PORT:-80}\"';/g' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
