@@ -1,8 +1,6 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY backend/pom.xml ./pom.xml
-COPY backend/gateway-service/pom.xml ./gateway-service/pom.xml
-COPY backend/gateway-service/src ./gateway-service/src
+COPY backend/ ./
 RUN mvn package -pl gateway-service -am -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine

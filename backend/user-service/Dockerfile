@@ -1,8 +1,6 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY backend/pom.xml ./pom.xml
-COPY backend/user-service/pom.xml ./user-service/pom.xml
-COPY backend/user-service/src ./user-service/src
+COPY backend/ ./
 RUN mvn package -pl user-service -am -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine

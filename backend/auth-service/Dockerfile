@@ -1,8 +1,6 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY backend/pom.xml ./pom.xml
-COPY backend/auth-service/pom.xml ./auth-service/pom.xml
-COPY backend/auth-service/src ./auth-service/src
+COPY backend/ ./
 RUN mvn package -pl auth-service -am -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
