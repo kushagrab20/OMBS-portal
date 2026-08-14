@@ -1,7 +1,7 @@
 FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
+COPY backend/user-service/pom.xml .
+COPY backend/user-service/src ./src
 RUN mvn package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
