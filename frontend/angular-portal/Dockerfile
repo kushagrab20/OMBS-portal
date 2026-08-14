@@ -7,7 +7,6 @@ COPY frontend/angular-portal/ ./
 RUN npx ng build
 
 FROM nginx:alpine
-ENV PORT=8080
-EXPOSE 8080
-COPY frontend/angular-portal/nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY frontend/angular-portal/nginx.conf.template /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/angular-portal/browser /usr/share/nginx/html
+EXPOSE 80 8080
