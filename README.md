@@ -18,7 +18,7 @@ A complete Enterprise Microservices Web Project for an Online Maid Bureau System
 - **Backend**: Java 17+, Spring Boot 3.2.2, Spring Cloud 2023.0.0, Spring Security (JWT)
 - **Service Mesh**: Netflix Eureka Server (Discovery), Spring Cloud Gateway (Routing & CORS)
 - **Database**: MySQL 8+ with Spring Data JPA & Hibernate
-- **Build & DevOps**: Maven 3.9+, Docker, Docker Compose, PowerShell Orchestrator
+- **Build & DevOps**: Maven 3.9+, Docker, PowerShell
 
 ## Installation Guide
 
@@ -105,9 +105,9 @@ ombs-system/
 
 ## Database Schema (ER Details)
 
-- **ombs_auth.users**: Stores user login credentials, hashed BCrypt passwords, and roles (`ADMIN`, `MEMBER`, `MAID`).
+- **ombs_auth.users**: Stores user login credentials, and roles (`ADMIN`, `MEMBER`, `MAID`).
 - **ombs_user.members**: Stores member profiles, home addresses, and verified contact info.
-- **ombs_user.maids**: Stores maid profiles, age, specialty (`Cleaner`, `Cook`, `Baby sitter`), experience, and availability status.
+- **ombs_user.maids**: Stores maid profiles, age, specialty (`Cleaner`, `Cook`, `Baby sitter`, `AllRounder`), experience, and availability status.
 - **ombs_matching.jobs**: Connects members with job details, location, budget, assigned maid, and allocation status.
 - **ombs_payment.payments**: Escrow transaction records tracking payment status and unlocking contact info.
 - **ombs_feedback.feedbacks**: Stores star ratings, review comments, and automated follow-up timestamps.
