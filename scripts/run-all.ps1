@@ -1,8 +1,6 @@
 # OMBS Orchestrator - Starts all backend services and frontends
 
-$baseDir = Split-Path -Path $PSScriptRoot -Parent
-if ([string]::IsNullOrEmpty($baseDir)) { $baseDir = Get-Location }
-
+$baseDir = "C:\Users\kusha\.gemini\antigravity-ide\scratch\ombs-system"
 $mvnPath = "$baseDir\backend\apache-maven-3.9.6\bin\mvn.cmd"
 
 Write-Host "=============================================" -ForegroundColor Cyan

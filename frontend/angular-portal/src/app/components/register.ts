@@ -69,9 +69,10 @@ import { AuthService } from '../services/auth.service';
               <input type="text" id="name" formControlName="name" 
                      class="form-control bg-light" 
                      placeholder="e.g. John Doe"
-                     [ngClass]="{'is-invalid': f['name'].touched && f['name'].errors}">
-              <div class="invalid-feedback" *ngIf="f['name'].touched && f['name'].errors">
-                Name is required.
+                     [ngClass]="{'is-invalid': (f['name'].dirty || f['name'].touched) && f['name'].errors}">
+              <div class="invalid-feedback" *ngIf="(f['name'].dirty || f['name'].touched) && f['name'].errors">
+                <span *ngIf="f['name'].errors['required']">Full Name is required.</span>
+                <span *ngIf="f['name'].errors['pattern']">Please enter letters only (numbers and special characters are not allowed).</span>
               </div>
             </div>
 
@@ -177,7 +178,7 @@ export class RegisterComponent implements OnInit {
       role: ['MEMBER', Validators.required],
       userId: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10), this.passwordValidator]],
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       address: ['', Validators.required],
       email: ['', [Validators.email]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
@@ -190,6 +191,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.onRoleChange('MEMBER');
   }
+
 
   // Custom password validator (no pure numeric password)
   passwordValidator(control: any) {

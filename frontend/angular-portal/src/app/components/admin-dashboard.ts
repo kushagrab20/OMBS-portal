@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -220,7 +221,11 @@ export class AdminDashboardComponent implements OnInit {
   feedbacks: any[] = [];
   selectedMaids: { [jobId: number]: string } = {};
 
-  constructor(private dataService: DataService) {}
+  constructor(
+    private dataService: DataService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -228,6 +233,7 @@ export class AdminDashboardComponent implements OnInit {
 
   setTab(tab: string): void {
     this.activeTab = tab;
+    this.cdr.detectChanges();
     this.loadData();
   }
 
@@ -235,28 +241,32 @@ export class AdminDashboardComponent implements OnInit {
     if (this.activeTab === 'allocate') {
       this.dataService.getAllJobs().subscribe({
         next: (jobs) => {
-          this.pendingJobs = jobs.filter(j => j.status?.toUpperCase() === 'PENDING');
+          this.pendingJobs = (jobs || []).filter(j => j.status?.toUpperCase() === 'PENDING');
+          this.cdr.detectChanges();
         },
         error: (err) => console.error('Failed to load pending jobs:', err)
       });
 
       this.dataService.getAllMaids().subscribe({
         next: (maids) => {
-          this.availableMaids = maids.filter(m => m.status?.toUpperCase() === 'AVAILABLE');
+          this.availableMaids = (maids || []).filter(m => m.status?.toUpperCase() === 'AVAILABLE');
+          this.cdr.detectChanges();
         },
         error: (err) => console.error('Failed to load available maids:', err)
       });
     } else if (this.activeTab === 'payments') {
       this.dataService.getPaymentHistory().subscribe({
         next: (payments) => {
-          this.payments = payments;
+          this.payments = payments || [];
+          this.cdr.detectChanges();
         },
         error: (err) => console.error('Failed to load payments:', err)
       });
     } else if (this.activeTab === 'feedback') {
       this.dataService.getAllFeedbacks().subscribe({
         next: (feedbacks) => {
-          this.feedbacks = feedbacks;
+          this.feedbacks = feedbacks || [];
+          this.cdr.detectChanges();
         },
         error: (err) => console.error('Failed to load feedbacks:', err)
       });
@@ -264,23 +274,12 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getAvailableMaidsForJob(job: any): any[] {
-    if (!this.availableMaids || this.availableMaids.length === 0) return [];
-    
-    const desc = (job.jobDetail || '').toLowerCase();
-    
-    const matched = this.availableMaids.filter(maid => {
-      const type = (maid.maidType || '').toLowerCase();
-      const isAllRounder = type.includes('all rounder') || type.includes('all-rounder') || type.includes('allrounder');
-      
-      // All rounders match every job request
-      if (isAllRounder) return true;
-      
-      // Specific maidType match with job description
+    // Basic recommendation filter: Specialty match
+    return this.availableMaids.filter(maid => {
+      const type = maid.maidType.toLowerCase();
+      const desc = job.jobDetail.toLowerCase();
       return desc.includes(type) || type.includes(desc);
     });
-
-    // Fallback: If no specific specialty maid matches, return all available maids so Admin is never blocked
-    return matched.length > 0 ? matched : this.availableMaids;
   }
 
   onAllocate(jobId: number): void {

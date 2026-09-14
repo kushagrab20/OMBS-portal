@@ -42,6 +42,7 @@ public class AuthController {
             // SRS Validation rules
             ValidationUtils.validateUserId(request.getUserId());
             ValidationUtils.validatePassword(request.getPassword());
+            ValidationUtils.validateName(request.getName());
 
             if (userRepository.existsById(request.getUserId())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "User ID already exists"));

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
@@ -268,20 +268,46 @@ import { AuthService } from '../services/auth.service';
                 <span class="fw-semibold text-success">{{profile?.status}}</span>
               </div>
             </div>
-
-            <div class="alert alert-info border-0 rounded-4">
-              <i class="bi bi-info-circle-fill me-2"></i>
-              Keep your profile, salary expectation, and contact numbers updated to lower your match wait time.
-            </div>
           </div>
 
-          <!-- Employer Feedback -->
+          <!-- Recommended Jobs -->
+          <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5 bg-white" *ngIf="activeTab === 'matching-jobs'">
+            <h4 class="fw-bold mb-4"><i class="bi bi-stars text-primary me-2"></i>Recommended Jobs Matching Your Specialty</h4>
+            
+            <div class="row g-4" *ngIf="matchingJobs.length > 0; else noMatching">
+              <div class="col-md-6" *ngFor="let job of matchingJobs">
+                <div class="card h-100 border shadow-sm rounded-4 p-3 hover-card">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1">{{job.jobType}}</span>
+                    <span class="fw-bold text-primary">₹{{job.salary}}</span>
+                  </div>
+                  <h6 class="fw-bold mb-2">{{job.jobDetail}}</h6>
+                  <p class="text-muted small mb-3"><i class="bi bi-geo-alt me-1"></i>{{job.jobLocation}}</p>
+                  
+                  <div class="mt-auto border-top pt-2">
+                    <button class="btn btn-sm btn-outline-success w-100 rounded-pill">
+                      <i class="bi bi-hand-thumbs-up me-1"></i> Apply / Express Interest
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noMatching>
+              <div class="text-center py-5">
+                <i class="bi bi-search text-muted display-2 mb-3 d-block"></i>
+                <h5 class="text-muted">No open job requests in your exact specialty currently.</h5>
+              </div>
+            </ng-template>
+          </div>
+
+          <!-- Client Feedback -->
           <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5 bg-white" *ngIf="activeTab === 'feedback'">
-            <h4 class="fw-bold mb-4"><i class="bi bi-chat-left-text text-success me-2"></i>Leave Feedback for Employer</h4>
+            <h4 class="fw-bold mb-4"><i class="bi bi-star text-warning me-2"></i>Leave Client Rating / Feedback</h4>
             <form [formGroup]="feedbackForm" (ngSubmit)="onSubmitFeedback()">
               <div class="row g-3">
                 <div class="col-sm-6">
-                  <label class="form-label fw-semibold small">Employer User ID (6-digit Member ID)</label>
+                  <label class="form-label fw-semibold small">Employer / Client User ID (6-digit ID)</label>
                   <input type="text" formControlName="receiverId" class="form-control bg-light" placeholder="e.g. 100001">
                   <div class="invalid-feedback d-block" *ngIf="fFeedback['receiverId'].touched && fFeedback['receiverId'].errors">
                     Receiver ID is required and must be 6 digits.
@@ -298,14 +324,14 @@ import { AuthService } from '../services/auth.service';
                   </select>
                 </div>
                 <div class="col-12">
-                  <label class="form-label fw-semibold small">Comments / Feedback details</label>
-                  <textarea formControlName="comments" class="form-control bg-light" rows="4" placeholder="Describe the working environment and employer behavior..."></textarea>
+                  <label class="form-label fw-semibold small">Comments / Experience</label>
+                  <textarea formControlName="comments" class="form-control bg-light" rows="4" placeholder="Share your experience working with this employer..."></textarea>
                   <div class="invalid-feedback d-block" *ngIf="fFeedback['comments'].touched && fFeedback['comments'].errors">
                     Comments are required.
                   </div>
                 </div>
                 <div class="col-12 mt-4">
-                  <button type="submit" class="btn btn-success rounded-3 px-4" [disabled]="feedbackForm.invalid">Submit Feedback</button>
+                  <button type="submit" class="btn btn-success rounded-3 px-4" [disabled]="feedbackForm.invalid">Submit Review</button>
                 </div>
               </div>
             </form>
@@ -319,8 +345,8 @@ export class MaidDashboardComponent implements OnInit {
   userId: string = '';
   activeTab: string = 'profile';
   profile: any = null;
-  matchingJobs: any[] = [];
   allocatedJobs: any[] = [];
+  matchingJobs: any[] = [];
 
   profileForm!: FormGroup;
   feedbackForm!: FormGroup;
@@ -328,12 +354,11 @@ export class MaidDashboardComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private dataService: DataService
+    private dataService: DataService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.authService.getUserId();
-    
     // Initialize Forms
     this.profileForm = this.fb.group({
       maidType: ['Cleaner', Validators.required],
@@ -353,8 +378,19 @@ export class MaidDashboardComponent implements OnInit {
       comments: ['', Validators.required]
     });
 
-    this.loadProfile();
-    this.loadAllocatedJobs();
+    this.authService.currentUser$.subscribe(user => {
+      if (user && user.userId) {
+        this.userId = user.userId;
+        this.loadProfile(true);
+        this.loadAllocatedJobs();
+      }
+    });
+
+    this.userId = this.authService.getUserId();
+    if (this.userId) {
+      this.loadProfile(true);
+      this.loadAllocatedJobs();
+    }
   }
 
   get fFeedback() {
@@ -363,34 +399,39 @@ export class MaidDashboardComponent implements OnInit {
 
   setTab(tab: string): void {
     this.activeTab = tab;
-    if (tab === 'matching-jobs') {
+    if (tab === 'profile') {
+      this.loadProfile(false);
+    } else if (tab === 'matching-jobs') {
       this.loadMatchingJobs();
     } else if (tab === 'allocated-jobs') {
       this.loadAllocatedJobs();
     }
+    this.cdr.detectChanges();
   }
 
-  loadProfile(): void {
+  loadProfile(isInitialLoad: boolean = false): void {
+    this.userId = this.authService.getUserId();
+    if (!this.userId) return;
     this.dataService.getMaidProfile(this.userId).subscribe({
       next: (profile) => {
         this.profile = profile;
-        this.profileForm.patchValue({
-          maidType: profile.maidType,
-          maidAge: profile.maidAge,
-          experienceYears: profile.experienceYears,
-          preferredJobType: profile.preferredJobType,
-          salaryExpectation: profile.salaryExpectation,
-          status: profile.status,
-          contactEmail: profile.contactEmail,
-          contactPhone: profile.contactPhone,
-          maidAddress: profile.maidAddress
-        });
-        
-        // If maid is allocated, default to allocated-jobs tab
-        if (profile.status === 'ALLOCATED') {
-          this.activeTab = 'allocated-jobs';
+        if (profile) {
+          this.profileForm.patchValue({
+            maidType: profile.maidType,
+            maidAge: profile.maidAge,
+            experienceYears: profile.experienceYears,
+            preferredJobType: profile.preferredJobType,
+            salaryExpectation: profile.salaryExpectation,
+            status: profile.status,
+            contactEmail: profile.contactEmail,
+            contactPhone: profile.contactPhone,
+            maidAddress: profile.maidAddress
+          });
+          if (isInitialLoad && profile.status === 'ALLOCATED') {
+            this.activeTab = 'allocated-jobs';
+          }
         }
-        
+        this.cdr.detectChanges();
         this.loadMatchingJobs();
       },
       error: (err) => console.error('Failed to fetch profile:', err)
@@ -401,17 +442,18 @@ export class MaidDashboardComponent implements OnInit {
     this.dataService.getJobsByMaid(this.userId).subscribe({
       next: (jobs) => {
         this.allocatedJobs = jobs || [];
+        this.cdr.detectChanges();
         // Fetch employer member profile & payment status for each allocated job
         this.allocatedJobs.forEach((job) => {
           if (job.memberId) {
             this.dataService.getMemberProfile(job.memberId).subscribe({
-              next: (member) => job.employer = member,
+              next: (member) => { job.employer = member; this.cdr.detectChanges(); },
               error: () => job.employer = null
             });
           }
           if (job.jobId) {
             this.dataService.getPaymentStatus(job.jobId).subscribe({
-              next: (pay) => job.paymentStatus = pay,
+              next: (pay) => { job.paymentStatus = pay; this.cdr.detectChanges(); },
               error: () => job.paymentStatus = null
             });
           }
@@ -424,7 +466,8 @@ export class MaidDashboardComponent implements OnInit {
   loadMatchingJobs(): void {
     this.dataService.getSuggestedJobsForMaid(this.userId).subscribe({
       next: (jobs) => {
-        this.matchingJobs = jobs;
+        this.matchingJobs = jobs || [];
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Failed to fetch matching jobs:', err)
     });

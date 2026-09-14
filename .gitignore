@@ -1,7 +1,10 @@
 # Target directories & Maven binaries
 **/target/
 **/*.jar
+**/BOOT-INF/
 backend/apache-maven-3.9.6/
+*.log
+**/*.log
 
 # Node modules & build outputs
 **/node_modules/
@@ -11,7 +14,5 @@ backend/apache-maven-3.9.6/
 # IDE & OS files
 .idea/
 .vscode/
-*.iml
-*.log
 .DS_Store
 Thumbs.db

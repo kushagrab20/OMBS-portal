@@ -24,4 +24,13 @@ public class ValidationUtils {
             throw new IllegalArgumentException("Password cannot be purely numeric");
         }
     }
+
+    public static void validateName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be blank");
+        }
+        if (!name.matches("^[a-zA-Z\\s]+$")) {
+            throw new IllegalArgumentException("Name must only contain alphabetic letters and spaces");
+        }
+    }
 }

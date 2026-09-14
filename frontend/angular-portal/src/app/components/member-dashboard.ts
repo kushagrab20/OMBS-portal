@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
@@ -306,12 +306,11 @@ export class MemberDashboardComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private dataService: DataService
+    private dataService: DataService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.authService.getUserId();
-    
     // Initialize Forms
     this.profileForm = this.fb.group({
       memberName: ['', Validators.required],
@@ -334,9 +333,19 @@ export class MemberDashboardComponent implements OnInit {
       comments: ['', Validators.required]
     });
 
-    // Load Data
-    this.loadProfile();
-    this.loadJobsAndPayments();
+    this.authService.currentUser$.subscribe(user => {
+      if (user && user.userId) {
+        this.userId = user.userId;
+        this.loadProfile();
+        this.loadJobsAndPayments();
+      }
+    });
+
+    this.userId = this.authService.getUserId();
+    if (this.userId) {
+      this.loadProfile();
+      this.loadJobsAndPayments();
+    }
   }
 
   get fFeedback() {
@@ -345,22 +354,31 @@ export class MemberDashboardComponent implements OnInit {
 
   setTab(tab: string): void {
     this.activeTab = tab;
-    if (tab === 'matching-maids') {
+    if (tab === 'profile') {
+      this.loadProfile();
+    } else if (tab === 'my-jobs') {
+      this.loadJobsAndPayments();
+    } else if (tab === 'matching-maids') {
       this.loadMatchingMaids();
     }
+    this.cdr.detectChanges();
   }
 
   loadProfile(): void {
+    this.userId = this.authService.getUserId();
+    if (!this.userId) return;
     this.dataService.getMemberProfile(this.userId).subscribe({
       next: (profile) => {
         this.profile = profile;
-        this.profileForm.patchValue({
-          memberName: profile.memberName,
-          memberAddress: profile.memberAddress,
-          contactEmail: profile.contactEmail,
-          contactPhone: profile.contactPhone
-        });
-        
+        if (profile) {
+          this.profileForm.patchValue({
+            memberName: profile.memberName,
+            memberAddress: profile.memberAddress,
+            contactEmail: profile.contactEmail,
+            contactPhone: profile.contactPhone
+          });
+        }
+        this.cdr.detectChanges();
         this.loadMatchingMaids();
       },
       error: (err) => console.error('Failed to fetch profile:', err)
@@ -368,25 +386,32 @@ export class MemberDashboardComponent implements OnInit {
   }
 
   loadJobsAndPayments(): void {
+    this.userId = this.authService.getUserId();
+    if (!this.userId) return;
     this.dataService.getJobsByMember(this.userId).subscribe({
       next: (jobs) => {
-        this.myJobs = jobs;
+        this.myJobs = jobs || [];
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Failed to load member jobs:', err)
     });
 
     this.dataService.getPaymentsByMember(this.userId).subscribe({
       next: (payments) => {
-        this.myPayments = payments;
+        this.myPayments = payments || [];
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Failed to load member payments:', err)
     });
   }
 
   loadMatchingMaids(): void {
+    this.userId = this.authService.getUserId();
+    if (!this.userId) return;
     this.dataService.getSuggestedMaidsForMember(this.userId).subscribe({
       next: (maids) => {
-        this.matchingMaids = maids;
+        this.matchingMaids = maids || [];
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Failed to load matching maids:', err)
     });

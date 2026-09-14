@@ -1,7 +1,7 @@
-# Fast OMBS Microservices Launcher (Skips Maven Build)
+# Fast OMBS Microservices Launcher
 
 $baseDir = Split-Path -Path $PSScriptRoot -Parent
-if ([string]::IsNullOrEmpty($baseDir)) { $baseDir = "K:\OMBS Project" }
+if ([string]::IsNullOrEmpty($baseDir)) { $baseDir = Get-Location }
 
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host "Fast Online Maid Bureau System (OMBS) Launcher" -ForegroundColor Cyan

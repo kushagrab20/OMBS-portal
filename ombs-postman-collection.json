@@ -1,0 +1,278 @@
+{
+	"info": {
+		"_postman_id": "ombs-api-collection-2026",
+		"name": "OMBS Microservices API Collection",
+		"description": "Postman collection for testing Online Maid Bureau System microservices via API Gateway (Port 8080)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Auth Service",
+			"item": [
+				{
+					"name": "Login (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"999999\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login (Member)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"100001\",\n  \"password\": \"member123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Register New Member",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"500001\",\n  \"password\": \"user123\",\n  \"role\": \"MEMBER\",\n  \"name\": \"Amit Verma\",\n  \"address\": \"Sector 62, Noida\",\n  \"email\": \"amit@gmail.com\",\n  \"phone\": \"9876543219\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/register",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "auth", "register"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. User Service",
+			"item": [
+				{
+					"name": "Get All Maids",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/users/maids",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "users", "maids"]
+						}
+					}
+				},
+				{
+					"name": "Get Maid By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/users/maids/200001",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "users", "maids", "200001"]
+						}
+					}
+				},
+				{
+					"name": "Get All Members",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/users/members",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "users", "members"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Matching Service",
+			"item": [
+				{
+					"name": "Get All Jobs",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/matching/jobs",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "matching", "jobs"]
+						}
+					}
+				},
+				{
+					"name": "Create Job Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"memberId\": \"100001\",\n  \"jobDetail\": \"Full Time Cook needed in Noida Sector 62\",\n  \"jobType\": \"Full Time\",\n  \"jobLocation\": \"Noida\",\n  \"salary\": 10000.0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/matching/jobs",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "matching", "jobs"]
+						}
+					}
+				},
+				{
+					"name": "Allocate Maid to Job",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "http://localhost:8080/api/matching/jobs/4/allocate?maidId=200003",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "matching", "jobs", "4", "allocate"],
+							"query": [
+								{
+									"key": "maidId",
+									"value": "200003"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Payment Service",
+			"item": [
+				{
+					"name": "Get Payment History",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/payments/history",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "payments", "history"]
+						}
+					}
+				},
+				{
+					"name": "Pay Matching Fee",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "http://localhost:8080/api/payments/pay/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "payments", "pay", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Feedback Service",
+			"item": [
+				{
+					"name": "Get All Feedbacks",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/feedback",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "feedback"]
+						}
+					}
+				},
+				{
+					"name": "Submit Feedback",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"senderId\": \"100001\",\n  \"receiverId\": \"200001\",\n  \"rating\": 5,\n  \"comments\": \"Excellent work, very punctual and professional.\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/feedback",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "feedback"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Report Service",
+			"item": [
+				{
+					"name": "Get Analytics Summary",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/reports/summary",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "reports", "summary"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

@@ -37,7 +37,7 @@ public class AllocationController {
     }
 
     @GetMapping("/jobs/{id}")
-    public ResponseEntity<?> getJobById(@PathVariable Long id) {
+    public ResponseEntity<?> getJobById(@PathVariable("id") Long id) {
         Optional<Job> job = jobRepository.findById(id);
         if (job.isPresent()) {
             return ResponseEntity.ok(job.get());
@@ -46,17 +46,17 @@ public class AllocationController {
     }
 
     @GetMapping("/members/{memberId}/jobs")
-    public ResponseEntity<List<Job>> getJobsByMember(@PathVariable String memberId) {
+    public ResponseEntity<List<Job>> getJobsByMember(@PathVariable("memberId") String memberId) {
         return ResponseEntity.ok(jobRepository.findByMemberId(memberId));
     }
 
     @GetMapping("/maids/{maidId}/jobs")
-    public ResponseEntity<List<Job>> getJobsByMaid(@PathVariable String maidId) {
+    public ResponseEntity<List<Job>> getJobsByMaid(@PathVariable("maidId") String maidId) {
         return ResponseEntity.ok(jobRepository.findByMaidId(maidId));
     }
 
     @PostMapping("/jobs/{jobId}/allocate")
-    public ResponseEntity<?> allocateMaid(@PathVariable Long jobId, @RequestParam String maidId) {
+    public ResponseEntity<?> allocateMaid(@PathVariable("jobId") Long jobId, @RequestParam("maidId") String maidId) {
         Optional<Job> jobOpt = jobRepository.findById(jobId);
         if (jobOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Job request not found"));

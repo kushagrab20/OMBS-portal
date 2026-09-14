@@ -28,7 +28,7 @@ public class PaymentController {
     }
 
     @PostMapping("/{transactionId}/pay")
-    public ResponseEntity<?> processPayment(@PathVariable Long transactionId) {
+    public ResponseEntity<?> processPayment(@PathVariable("transactionId") Long transactionId) {
         Optional<Payment> paymentOpt = paymentRepository.findById(transactionId);
         if (paymentOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Transaction not found"));
@@ -43,14 +43,14 @@ public class PaymentController {
     }
 
     @GetMapping("/job/{jobId}")
-    public ResponseEntity<?> getPaymentByJobId(@PathVariable Long jobId) {
+    public ResponseEntity<?> getPaymentByJobId(@PathVariable("jobId") Long jobId) {
         return paymentRepository.findByJobId(jobId)
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "No payment found for this job")));
     }
 
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<Payment>> getPaymentsByMember(@PathVariable String memberId) {
+    public ResponseEntity<List<Payment>> getPaymentsByMember(@PathVariable("memberId") String memberId) {
         return ResponseEntity.ok(paymentRepository.findByMemberId(memberId));
     }
 
@@ -60,7 +60,7 @@ public class PaymentController {
     }
 
     @GetMapping("/status/{jobId}")
-    public ResponseEntity<?> checkPaymentStatus(@PathVariable Long jobId) {
+    public ResponseEntity<?> checkPaymentStatus(@PathVariable("jobId") Long jobId) {
         Optional<Payment> paymentOpt = paymentRepository.findByJobId(jobId);
         if (paymentOpt.isPresent()) {
             return ResponseEntity.ok(Map.of("jobId", jobId, "paid", "Yes".equalsIgnoreCase(paymentOpt.get().getPaymentDone())));

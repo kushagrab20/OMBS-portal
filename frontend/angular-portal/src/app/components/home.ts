@@ -185,8 +185,7 @@ export class HomeComponent implements OnInit {
       const maidType = (maid.maidType || '').toLowerCase();
 
       const locationMatch = !loc || maidAddr.includes(loc);
-      const isAllRounder = maidType.includes('all rounder') || maidType.includes('all-rounder') || maidType.includes('allrounder');
-      const typeMatch = !type || maidType.includes(type) || type.includes(maidType) || isAllRounder;
+      const typeMatch = !type || maidType.includes(type) || type.includes(maidType);
 
       return locationMatch && typeMatch;
     });

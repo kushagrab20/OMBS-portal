@@ -29,7 +29,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Feedback>> getFeedbacksForUser(@PathVariable String userId) {
+    public ResponseEntity<List<Feedback>> getFeedbacksForUser(@PathVariable("userId") String userId) {
         return ResponseEntity.ok(feedbackRepository.findByReceiverId(userId));
     }
 
@@ -39,7 +39,7 @@ public class FeedbackController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteFeedback(@PathVariable Long id) {
+    public ResponseEntity<?> deleteFeedback(@PathVariable("id") Long id) {
         if (feedbackRepository.existsById(id)) {
             feedbackRepository.deleteById(id);
             return ResponseEntity.ok(Map.of("message", "Feedback removed successfully"));

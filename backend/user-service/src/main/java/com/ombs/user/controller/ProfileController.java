@@ -35,6 +35,16 @@ public class ProfileController {
         String email = (String) payload.get("email");
         String phone = (String) payload.get("phone");
 
+        // Validate Name (letters and spaces only, reject numbers and special characters)
+        if (name == null || name.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Name is required and cannot be blank."));
+        }
+        if (!name.matches("^[a-zA-Z\\s]+$")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Name must only contain alphabetic letters and spaces (no numbers or special characters allowed)."));
+        }
+
         // Validate 10-digit Phone Number
         if (phone == null || !phone.trim().matches("^[0-9]{10}$")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -89,7 +99,7 @@ public class ProfileController {
     }
 
     @GetMapping("/maids/{id}")
-    public ResponseEntity<?> getMaidById(@PathVariable String id) {
+    public ResponseEntity<?> getMaidById(@PathVariable("id") String id) {
         Optional<Maid> maidOpt = maidRepository.findById(id);
         if (maidOpt.isPresent()) {
             Maid maid = maidOpt.get();
@@ -118,7 +128,11 @@ public class ProfileController {
     }
 
     @PutMapping("/maids/{id}")
-    public ResponseEntity<?> updateMaid(@PathVariable String id, @RequestBody Maid updatedMaid) {
+    public ResponseEntity<?> updateMaid(@PathVariable("id") String id, @RequestBody Maid updatedMaid) {
+        if (updatedMaid.getMaidName() != null && !updatedMaid.getMaidName().trim().matches("^[a-zA-Z\\s]+$")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Maid name must only contain letters and spaces (no numbers or special characters allowed)."));
+        }
         return maidRepository.findById(id).map(maid -> {
             if (updatedMaid.getMaidName() != null) {
                 maid.setMaidName(updatedMaid.getMaidName());
@@ -147,7 +161,7 @@ public class ProfileController {
     }
 
     @GetMapping("/members/{id}")
-    public ResponseEntity<?> getMemberById(@PathVariable String id) {
+    public ResponseEntity<?> getMemberById(@PathVariable("id") String id) {
         Optional<Member> member = memberRepository.findById(id);
         if (member.isPresent()) {
             return ResponseEntity.ok(member.get());
@@ -156,7 +170,11 @@ public class ProfileController {
     }
 
     @PutMapping("/members/{id}")
-    public ResponseEntity<?> updateMember(@PathVariable String id, @RequestBody Member updatedMember) {
+    public ResponseEntity<?> updateMember(@PathVariable("id") String id, @RequestBody Member updatedMember) {
+        if (updatedMember.getMemberName() != null && !updatedMember.getMemberName().trim().matches("^[a-zA-Z\\s]+$")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Member name must only contain letters and spaces (no numbers or special characters allowed)."));
+        }
         return memberRepository.findById(id).map(member -> {
             member.setMemberName(updatedMember.getMemberName());
             member.setMemberAddress(updatedMember.getMemberAddress());
@@ -170,7 +188,7 @@ public class ProfileController {
     // --- Profile Matching Suggestions API ---
 
     @GetMapping("/maids/{maidId}/matching-jobs")
-    public ResponseEntity<?> getMatchingJobsForMaid(@PathVariable String maidId) {
+    public ResponseEntity<?> getMatchingJobsForMaid(@PathVariable("maidId") String maidId) {
         Optional<Maid> maidOpt = maidRepository.findById(maidId);
         if (maidOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Maid profile not found"));
@@ -212,7 +230,7 @@ public class ProfileController {
     }
 
     @GetMapping("/members/{memberId}/matching-maids")
-    public ResponseEntity<?> getMatchingMaidsForMember(@PathVariable String memberId) {
+    public ResponseEntity<?> getMatchingMaidsForMember(@PathVariable("memberId") String memberId) {
         Optional<Member> memberOpt = memberRepository.findById(memberId);
         if (memberOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Member profile not found"));

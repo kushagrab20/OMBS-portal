@@ -96,4 +96,39 @@ public class ValidationTests {
         });
         assertEquals("Password cannot be blank", exception.getMessage());
     }
+
+    // --- Name Test Cases (Letters and spaces only) ---
+
+    @Test
+    public void testNameWithLettersAndSpaces() {
+        assertDoesNotThrow(() -> {
+            ValidationUtils.validateName("Pooja Sharma");
+            ValidationUtils.validateName("Raj Kumar");
+            ValidationUtils.validateName("Sunita");
+        });
+    }
+
+    @Test
+    public void testNameWithNumbers() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            ValidationUtils.validateName("Pooja123");
+        });
+        assertEquals("Name must only contain alphabetic letters and spaces", exception.getMessage());
+    }
+
+    @Test
+    public void testNameWithSpecialCharacters() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            ValidationUtils.validateName("Pooja@Sharma!");
+        });
+        assertEquals("Name must only contain alphabetic letters and spaces", exception.getMessage());
+    }
+
+    @Test
+    public void testNameIsBlank() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            ValidationUtils.validateName("");
+        });
+        assertEquals("Name cannot be blank", exception.getMessage());
+    }
 }
