@@ -83,6 +83,10 @@ import { AuthService } from '../services/auth.service';
                      class="form-control bg-light" 
                      placeholder="e.g. john@example.com"
                      [ngClass]="{'is-invalid': f['email'].touched && f['email'].errors}">
+              <div class="invalid-feedback d-block" *ngIf="f['email'].touched && f['email'].errors">
+                <span *ngIf="f['email'].errors['required']">Email address is required.</span>
+                <span *ngIf="f['email'].errors['email'] || f['email'].errors['pattern']">Enter a valid email.</span>
+              </div>
             </div>
             <div class="col-sm-6">
               <label for="phone" class="form-label fw-semibold small">Phone Number (10 Digits)</label>
@@ -136,6 +140,7 @@ import { AuthService } from '../services/auth.service';
               <select id="maidType" formControlName="maidType" 
                       class="form-select bg-light"
                       [ngClass]="{'is-invalid': f['maidType'].touched && f['maidType'].errors}">
+                <option value="" disabled>Select maid type</option>
                 <option value="Baby sitter">Baby sitter</option>
                 <option value="Cleaner">Cleaner</option>
                 <option value="Cook">Cook</option>
@@ -180,10 +185,10 @@ export class RegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10), this.passwordValidator]],
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       address: ['', Validators.required],
-      email: ['', [Validators.email]],
+      email: ['', [Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+$')]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       age: [null],
-      maidType: ['Cleaner'],
+      maidType: [''],
       experienceYears: [1]
     });
   }

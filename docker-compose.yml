@@ -19,7 +19,7 @@ services:
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/ombs_auth?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Kushagra@20
+      - SPRING_DATASOURCE_PASSWORD=Coforge@123456
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -37,7 +37,7 @@ services:
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/ombs_user?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Kushagra@20
+      - SPRING_DATASOURCE_PASSWORD=Coforge@123456
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -55,7 +55,7 @@ services:
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/ombs_matching?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Kushagra@20
+      - SPRING_DATASOURCE_PASSWORD=Coforge@123456
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -73,7 +73,7 @@ services:
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/ombs_payment?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Kushagra@20
+      - SPRING_DATASOURCE_PASSWORD=Coforge@123456
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -91,7 +91,7 @@ services:
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/ombs_feedback?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Kushagra@20
+      - SPRING_DATASOURCE_PASSWORD=Coforge@123456
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -109,7 +109,7 @@ services:
       - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/ombs_matching?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Kushagra@20
+      - SPRING_DATASOURCE_PASSWORD=Coforge@123456
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:

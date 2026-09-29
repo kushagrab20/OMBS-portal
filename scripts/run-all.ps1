@@ -1,7 +1,19 @@
 # OMBS Orchestrator - Starts all backend services and frontends
 
-$baseDir = "C:\Users\kusha\.gemini\antigravity-ide\scratch\ombs-system"
-$mvnPath = "$baseDir\backend\apache-maven-3.9.6\bin\mvn.cmd"
+$baseDir = Split-Path -Path $PSScriptRoot -Parent
+if ([string]::IsNullOrEmpty($baseDir)) { $baseDir = Get-Location }
+
+$mvnCandidates = @(
+    (Join-Path $baseDir 'backend\apache-maven-3.9.6\bin\mvn.cmd'),
+    'C:\Users\ASHUTOSH.4.MISHRA\Downloads\apache-maven-3.9.16\bin\mvn.cmd',
+    "$env:USERPROFILE\Downloads\apache-maven-3.9.16\bin\mvn.cmd"
+)
+
+$mvnPath = $mvnCandidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+if (-not $mvnPath) {
+    Write-Error "Maven executable not found. Please place Maven in backend/apache-maven-3.9.6 or download it to Downloads."
+    exit 1
+}
 
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host "Online Maid Bureau System (OMBS) Launcher" -ForegroundColor Cyan

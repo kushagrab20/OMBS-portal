@@ -44,7 +44,7 @@ A complete Enterprise Microservices Web Project for an Online Maid Bureau System
      datasource:
        url: jdbc:mysql://localhost:3306/ombs_auth
        username: root
-       password: Kushagra@20
+       password: Coforge@123456
    ```
 
 ### Step 3: Deployment / Execution
@@ -112,4 +112,4 @@ ombs-system/
 - **ombs_payment.payments**: Escrow transaction records tracking payment status and unlocking contact info.
 - **ombs_feedback.feedbacks**: Stores star ratings, review comments, and automated follow-up timestamps.
 
-Enjoy building and extending the Online Maid Bureau System! .
+Enjoy building and extending the Online Maid Bureau System!
